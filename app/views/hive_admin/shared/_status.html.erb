@@ -1,0 +1,6 @@
+<% if user_signed_in? && current_user != true_user %>
+<div class="alert alert-warning">
+  You (<%= true_user.username %>) are currently signed in as <%= current_user.username %>.
+  <%= link_to "Back to admin", stop_impersonating_admin_users_path %>
+</div>
+<% end %>

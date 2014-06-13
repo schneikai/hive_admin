@@ -1,0 +1,9 @@
+===============================================================================
+
+HiveAdmin was installed successfully! Some last things you should know:
+
+  1. Add HiveAdmin status messages partial to app/views/layouts/application.html.erb.
+
+       <%= render 'hive_admin/shared/status' %>
+
+===============================================================================
