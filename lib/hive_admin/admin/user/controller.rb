@@ -1,7 +1,7 @@
 ActiveAdmin.register User do
   # No need to confirm accounts when created here.
   after_build do |user|
-    user.skip_confirmation! if resource.confirmable?
+    user.skip_confirmation! if user.confirmable?
   end
 
   controller do
