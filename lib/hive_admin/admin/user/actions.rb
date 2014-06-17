@@ -1,5 +1,5 @@
 ActiveAdmin.register User do
-  member_action :confirm_user, method: :put do
+  member_action :confirm, method: :put do
     resource.confirm! unless resource.confirmed?
 
     redirect_location = URI(request.referer).path || resource_path
@@ -7,7 +7,9 @@ ActiveAdmin.register User do
   end
 
   action_item only: :show do
-    link_to('Confirm', confirm_user_admin_user_path(resource), method: :put) if resource.confirmable? && !resource.confirmed?
+    if authorized?(:confirm, resource) && resource.confirmable? && !resource.confirmed?
+      link_to('Confirm', confirm_admin_user_path(resource), method: :put)
+    end
   end
 
   member_action :impersonate, method: :get do

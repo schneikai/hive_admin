@@ -1,4 +1,8 @@
-ActiveAdmin.setup do |config|
+HiveAdmin.configure_aa do |config|
+  # Set ActiveAdmins load path for configuration modules.
+  # First the engine directory and then the host apps directory so we can
+  # overwrite stuff defined in the engine from the host app.
+  config.load_paths = [HiveAdmin::Engine.root.join('lib', 'hive_admin', 'admin').to_s, Rails.root.join('app', 'admin').to_s]
 
   # == Site Title
   #
@@ -9,7 +13,7 @@ ActiveAdmin.setup do |config|
 
   # Set the link url for the title. For example, to take
   # users to your main site. Defaults to no link.
-
+  #
   config.site_title_link = "/"
 
   # Set an optional image to be displayed for the header
@@ -47,34 +51,6 @@ ActiveAdmin.setup do |config|
   # This will ONLY change the title for the admin section. Other
   # namespaces will continue to use the main "site_title" configuration.
 
-  # == User Authentication
-  #
-  # Active Admin will automatically call an authentication
-  # method in a before filter of all controller actions to
-  # ensure that there is a currently logged in admin user.
-  #
-  # This setting changes the method which Active Admin calls
-  # within the application controller.
-  config.authentication_method = :authenticate_admin_user!
-
-  # == User Authorization
-  #
-  # Active Admin will automatically call an authorization
-  # method in a before filter of all controller actions to
-  # ensure that there is a user with proper rights. You can use
-  # CanCanAdapter or make your own. Please refer to documentation.
-  # config.authorization_adapter = ActiveAdmin::CanCanAdapter
-
-  # You can customize your CanCan Ability class name here.
-  # config.cancan_ability_class = "Ability"
-
-  # You can specify a method to be called on unauthorized access.
-  # This is necessary in order to prevent a redirect loop which happens
-  # because, by default, user gets redirected to Dashboard. If user
-  # doesn't have access to Dashboard, he'll end up in a redirect loop.
-  # Method provided here should be defined in application_controller.rb.
-  # config.on_unauthorized_access = :access_denied
-
   # == Current User
   #
   # Active Admin will associate actions with the current
@@ -84,6 +60,35 @@ ActiveAdmin.setup do |config|
   # (within the application controller) to return the currently logged in user.
   config.current_user_method = :current_admin_user
 
+  # == User Authentication
+  #
+  # Active Admin will automatically call an authentication
+  # method in a before filter of all controller actions to
+  # ensure that there is a currently logged in admin user.
+  #
+  # This setting changes the method which Active Admin calls
+  # within the application controller.
+  # config.authentication_method = :authenticate_admin_user!
+  config.authentication_method = :authenticate_user!
+
+  # == User Authorization
+  #
+  # Active Admin will automatically call an authorization
+  # method in a before filter of all controller actions to
+  # ensure that there is a user with proper rights. You can use
+  # CanCanAdapter or make your own. Please refer to documentation.
+  config.authorization_adapter = HiveAdmin::BasicAuthorizationAdapter
+
+  # You can customize your CanCan Ability class name here if you use
+  # HiveAdmin::CanCanAuthorizationAdapter.
+  # config.cancan_ability_class = "UserAbility"
+
+  # You can specify a method to be called on unauthorized access.
+  # This is necessary in order to prevent a redirect loop which happens
+  # because, by default, user gets redirected to Dashboard. If user
+  # doesn't have access to Dashboard, he'll end up in a redirect loop.
+  # Method provided here should be defined in application_controller.rb.
+  config.on_unauthorized_access = :hive_admin_access_denied
 
   # == Logging Out
   #
@@ -95,7 +100,6 @@ ActiveAdmin.setup do |config|
   # will call the method to return the path.
   #
   # Default:
-  # TODO
   # config.logout_link_path = :destroy_admin_user_session_path
   config.logout_link_path = :destroy_user_session_path
 
@@ -202,6 +206,8 @@ ActiveAdmin.setup do |config|
   #       menu.add label: "My Great Website", url: "http://www.mygreatwebsite.com", html_options: { target: :blank }
   #     end
   #   end
+
+  config.show_comments_in_menu = false
 
 
   # == Download Links

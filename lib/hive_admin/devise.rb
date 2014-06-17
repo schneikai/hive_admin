@@ -16,6 +16,7 @@ module Devise
       def self.define_helpers(mapping) #:nodoc:
         old_define_helpers(mapping)
         ActiveSupport.on_load(:action_controller) { include HiveAdmin::Controller }
+        ActiveSupport.on_load(:action_controller) { include HiveAdmin::Impersonator }
       end
     end
   end

@@ -34,8 +34,10 @@ ActiveAdmin.register User do
     # or
     # http://staal.io/blog/2013/02/26/mastering-activeadmin/
     # https://github.com/inossidabile/mastering_aa/blob/master/config/initializers/active_admin/filter_multiple_select_input.rb
-    f.has_many :rolez, allow_destroy: true do |p|
-      p.input :name
+    if authorized?(:rolify, user)
+      f.has_many :rolez, allow_destroy: true do |p|
+        p.input :name
+      end
     end
 
     f.actions

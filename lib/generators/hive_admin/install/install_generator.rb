@@ -14,9 +14,9 @@ module HiveAdmin
       end
     end
 
-    # def copy_initializer
-    #   template "initializer.rb", "config/initializers/hive_admin.rb"
-    # end
+    def copy_initializer
+      template "initializer.rb", "config/initializers/hive_admin.rb"
+    end
 
     # def copy_user
     #   template "user.rb", "app/models/user.rb"
