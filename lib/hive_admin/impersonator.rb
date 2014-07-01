@@ -4,6 +4,8 @@
 # method return this user instead of the actual user and adding a *true_user*
 # method to return the actual user.
 # The code was inspired by https://github.com/ankane/pretender.
+#
+# Maybe checkout this Gem https://github.com/flyerhzm/switch_user
 
 module HiveAdmin
   module Impersonator

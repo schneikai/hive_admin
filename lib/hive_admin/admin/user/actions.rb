@@ -1,5 +1,7 @@
 ActiveAdmin.register User do
   member_action :confirm, method: :put do
+    authorize! :confirm, resource
+
     resource.confirm! unless resource.confirmed?
 
     redirect_location = URI(request.referer).path || resource_path
@@ -12,10 +14,20 @@ ActiveAdmin.register User do
     end
   end
 
+
   member_action :impersonate, method: :get do
+    authorize! :impersonate, resource
+
     impersonate_user(resource)
     redirect_to root_path
   end
+
+  action_item only: :show do
+    if authorized?(:impersonate, resource)
+      link_to('Confirm', confirm_admin_user_path(resource), method: :put)
+    end
+  end
+
 
   collection_action :stop_impersonating, method: :get do
     stop_impersonating_user
