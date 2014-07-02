@@ -15,3 +15,9 @@
 // For example, to change the default status-tag color:
 //
 //   .status_tag { background: #6090DB; }
+
+
+// Fix spacing when using hints for checkboxes.
+form fieldset > ol > li.boolean {
+  height: auto;
+}
