@@ -4,8 +4,7 @@ ActiveAdmin.register User do
 
     resource.confirm! unless resource.confirmed?
 
-    redirect_location = URI(request.referer).path || resource_path
-    redirect_to redirect_location, notice: "User has been confirmed successfully!"
+    redirect_to hive_admin_return_path(resource_path(resource)), notice: "User confirmed successfully!"
   end
 
   action_item only: :show do

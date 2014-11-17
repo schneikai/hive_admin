@@ -33,5 +33,67 @@ module HiveAdmin
     def hive_admin_access_denied(exception)
       redirect_to root_path, alert: exception.message
     end
+
+    # Returns a redirect location for member actions by using the a stored
+    # location from the session or the referer. If no stored location or
+    # referer is present +fallback+ is returned. If no fallback is present
+    # +admin_path+ is returned.
+    #
+    # Example:
+    #
+    #   member_action :confirm, method: :put do
+    #     resource.do_something
+    #     redirect_to hive_admin_return_path(resource_path(resource)), notice: "Done somenthing successfully!"
+    #   end
+    #
+    def hive_admin_return_path(fallback=nil)
+      if (url = hive_admin_stored_location).present?
+        url
+      elsif request.referer.present?
+        URI(request.referer).request_uri
+      elsif fallback.present?
+        fallback
+      else
+        admin_path
+      end
+    end
+
+
+
+    # Provide the ability to store a location.
+    # Used to redirect back to a desired path after sign in.
+    # This is borrowed from Devise.
+
+    # Returns and delete (if it's navigational format) the url stored in the session for
+    # the given scope. Useful for giving redirect backs after sign up:
+    #
+    # Example:
+    #
+    #   redirect_to stored_location_for(:user) || root_path
+    #
+    def hive_admin_stored_location
+      session.delete hive_admin_stored_location_key
+    end
+
+    # Stores the provided location to redirect the user after signing in.
+    # Useful in combination with the `stored_location_for` helper.
+    #
+    # Example:
+    #
+    #   store_location_for(:user, dashboard_path)
+    #   redirect_to user_omniauth_authorize_path(:facebook)
+    #
+    def hive_admin_store_location(location)
+      if location
+        uri = URI.parse(location)
+        session[hive_admin_stored_location_key] = [uri.path.sub(/\A\/+/, '/'), uri.query].compact.join('?')
+      end
+    end
+
+    private
+      def hive_admin_stored_location_key
+        'hive_admin_return_to'
+      end
+
   end
 end
